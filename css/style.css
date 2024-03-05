@@ -142,6 +142,11 @@ main{
     left: 10px;
 }
 
+.carousel{
+    height: 100%;
+    overflow: hidden;
+}
+
 .carousel-dots{
     position: absolute;
     right: 50%;
@@ -151,15 +156,34 @@ main{
     gap: 0 5px;
 }
 
+
+
 .carousel ul{
     list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    width: 300%;
+    position: relative;
+}
+
+.mySlide{
+    width: 100%;
 }
 
 .dot{
     width: 10px;
     height: 10px;
-    background-color: white;
+    background-color: rgb(117, 117, 117);
     border-radius: 50%;
+    box-shadow: 0 0 0 white;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.dot:hover{
+    cursor: pointer;
+    box-shadow: 0 0 5px white;
+    background-color: rgb(185, 185, 185);
+    transition: box-shadow 0.3s ease-in-out;
 }
 
 /* BANNER CSS END */

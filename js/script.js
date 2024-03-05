@@ -9,6 +9,18 @@ let initializeListeners = () =>{
     initOnPressNavbarOurTeam();
     initOnPressFooterLogo();
     initOnHoverServices();
+    initOnCarouselPress();
+    initOnScreenConfig();
+    initOnCarouselDotsPress();
+}
+
+let initOnScreenConfig = () => {
+    window.addEventListener('resize', ()=>{
+        carouselElement = document.getElementById('carousel');
+        carouselElementWidth = carouselElement.offsetWidth;
+        slideDistance = carouselElementWidth;
+        carousel_toSlide(0);
+    })
 }
 
 // For Navbar Logo onpress Go To Top
@@ -28,7 +40,7 @@ let initOnPressNavbarLogo = () =>{
 let initOnPressNavbarAboutUs = () =>{
     var navbarAboutUs = document.getElementById('navbar-about-us');
     navbarAboutUs.addEventListener('click', (event)=>{
-        // Scroll to Top
+        
         event.preventDefault();
 
         var aboutUsSect = document.getElementById("about-us-sect");
@@ -134,8 +146,94 @@ let initOnHoverServices = () => {
     });
 }
 
-// Call the function to initialize the hover effect
-initOnHoverServices();
+// Carousel Controler
 
+// Carousel Left/Right Buttons
+let carouselIndex = 0;
+let carouselElementWidth = 0;
+let carouselElement = null;
+let carouselInc = (n) =>{
+    const carouselSlider = document.querySelector('.carousel ul');
+    let slideDistance = carouselElementWidth;
+
+    // Determine the Index
+    let incVal = n == "carousel-prev"? -1 : 1; 
+    carouselIndex+=incVal;
+
+    if (carouselIndex < 0) {
+        carouselIndex = 2;
+    } else if (carouselIndex > 2) {
+        carouselIndex = 0;
+    }
+
+    // Sliding Movement
+    carousel_toSlide(carouselIndex);
+
+    console.log(carouselIndex);
+}
+
+let carousel_toSlide = (slide_index) => {
+    const carouselSlider = document.querySelector('.carousel ul');
+    let slideDistance = carouselElementWidth;
+    carouselIndex = slide_index;
+
+    // Sliding Movement
+    let newLeftValue = -slide_index * slideDistance;
+    carouselSlider.style.transition = "left 0.5s ease-in-out";
+    carouselSlider.style.left = newLeftValue + "px";
+
+    updateCarouselDots();
+    
+}
+
+
+let initOnCarouselPress = () =>{
+
+    carouselElement = document.getElementById('carousel');
+    carouselElementWidth = carouselElement.offsetWidth;
+    console.log(carouselElementWidth);
+
+    const carouselButtons = document.querySelectorAll('#carousel-prev, #carousel-next');
+    carouselButtons.forEach(carouselButton => carouselButton.addEventListener('click', (event)=>{
+        const pressedCarouselButton = event.target;
+        const pressedCarouselButtonId = pressedCarouselButton.id;
+
+        carouselInc(pressedCarouselButtonId);
+    }))
+
+}
+
+// Carousel Dots
+let carouselDots = null;
+let pressedCarouselDot = null;
+
+let initOnCarouselDotsPress = () => {
+    carouselDots = document.querySelectorAll('.dot');
+    carouselDots[0].style.backgroundColor = "white";
+
+    carouselDots.forEach(carouselDot => carouselDot.addEventListener('click', (event)=>{
+        pressedCarouselDot = event.target;
+        let pressedDotIndex = 0;
+
+        for(let i = 0; i<3; i++){
+            if(carouselDots[i] == pressedCarouselDot){
+                pressedDotIndex = i;
+                break;
+            }
+        }
+
+        console.log(pressedDotIndex);
+        carouselIndex = pressedDotIndex;
+        carousel_toSlide(pressedDotIndex);
+
+
+    }))
+}
+
+let updateCarouselDots = () => {
+    carouselDots.forEach(dot => dot.style.backgroundColor = "#757575");
+    carouselDots[carouselIndex].style.backgroundColor = "white";
+    carouselDots[carouselIndex].style.transition = "background-color 0.3s ease-in-out";
+}
 
 
